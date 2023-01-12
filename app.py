@@ -2,10 +2,24 @@ from menu import MENU, init_Stats
 
 
 def report():
+    """Print the value of each item in init_Stats"""
     print(f"water: {init_Stats['water']}ml")
     print(f"milk: {init_Stats['milk']}ml")
-    print(f"water: {init_Stats['coffee']}g")
-    print(f"water: ${init_Stats['money']}")
+    print(f"coffee: {init_Stats['coffee']}g")
+    print(f"money: ${init_Stats['money']}")
+
+
+def refill(ingredient):
+    """Updates the init_Stats based on user input"""
+    if ingredient == "water":
+        init_Stats["water"] = 300
+        print("water has been refilled")
+    elif ingredient == "milk":
+        init_Stats["milk"] = 200
+        print("milk has been refilled")
+    elif ingredient == "coffee":
+        init_Stats["coffee"] = 100
+        print("coffee has been refilled")
 
 
 def check_resource(order):
@@ -47,6 +61,9 @@ while machine_on:
         report()
     elif user_input == "off":
         machine_on = False
+    elif user_input == "refill":
+        item_to_refill = input("What item should be refilled?: ")
+        refill(item_to_refill)
     else:
         availability = check_resource(user_input)
         if availability != "Proceed":
@@ -57,7 +74,8 @@ while machine_on:
 
             order_price = MENU[user_input]["cost"]
             if payment > order_price:
-                change = payment - order_price
+                remaining = payment - order_price
+                change = float("{:.2f}".format(remaining))
                 serve_order(user_input, order_price)
                 print(f"Here is ${change} in change.")
                 print(f"Enjoy your {user_input}")
